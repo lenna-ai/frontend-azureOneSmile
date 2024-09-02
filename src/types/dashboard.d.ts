@@ -22,3 +22,15 @@ export type RES_countUserPerHour = {
 export type RES_totalUser = {
   TotalUser: number;
 };
+
+export type PageParams = {
+  page: number;
+};
+
+export type RES_dataUser = {
+  ID: number;
+  UserId: number;
+  Username: string;
+  CreatedAt: string;
+  UpdatedAt: string;
+};

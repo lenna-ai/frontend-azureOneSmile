@@ -28,8 +28,6 @@ export default function Dashboard() {
     },
   });
 
-  console.log(queryCountUserPerDay.data);
-
   return (
     <div className="overflow-y-auto w-full gap-4 col-span-7 grid grid-cols-7 h-[calc(100vh-100px)]">
       <div className="col-span-7 w-full gap-4">

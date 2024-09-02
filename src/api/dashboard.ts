@@ -45,3 +45,13 @@ export async function getTotalUser() {
 
   return response.data;
 }
+
+export async function getDataUser(params?: type.PageParams) {
+  const response = await API<type.PageParams, BaseAPI<type.RES_dataUser[]>>({
+    method: "GET",
+    path: "/dashboard",
+    params,
+  });
+
+  return response.data;
+}
