@@ -1,0 +1,44 @@
+@import 'css-reset.scss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  font-family: "Nunito", sans-serif;
+}
+
+button {
+  @apply t;
+  &:hover {
+    @apply opacity-70;
+  }
+}
+
+@layer base {
+
+  .t {
+    @apply transition-all duration-300;
+  }
+
+  .fc {
+    @apply flex justify-center items-center;
+  }
+}
+
+.no-scroll {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance:none;
+}
+
