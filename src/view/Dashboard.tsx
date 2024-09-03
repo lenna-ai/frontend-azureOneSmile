@@ -22,7 +22,15 @@ type Props = {
 export default function Dashboard({ dates }: Props) {
   const queryTop5User = useQuery({
     queryKey: ["TOP_5_USER"],
-    queryFn: getTop5User,
+    queryFn: async () => {
+      const params = {
+        from_date:
+          dates[0] || dayjs().subtract(90, "days").format("YYYY-MM-DD"),
+        to_date: dates[1] || dayjs().format("YYYY-MM-DD"),
+      };
+
+      return await getTop5User(params);
+    },
   });
   console.log("DATES", dates);
   const queryCountUserPerDay = useQuery({

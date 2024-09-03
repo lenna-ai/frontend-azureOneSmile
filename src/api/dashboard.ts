@@ -15,10 +15,11 @@ export async function getCountUserPerDay(params: type.DateParams) {
   return response.data;
 }
 
-export async function getTop5User() {
-  const response = await API<null, BaseAPI<type.RES_top5User[]>>({
+export async function getTop5User(params: type.DateParams) {
+  const response = await API<type.DateParams, BaseAPI<type.RES_top5User[]>>({
     method: "GET",
     path: "/dashboard/top5User",
+    params,
   });
 
   return response.data;
