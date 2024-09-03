@@ -51,7 +51,7 @@ function App() {
               {activeView === "DATA_TABLE" ? (
                 <DataTable />
               ) : (
-                <Dashboard dates={date} />
+                <Dashboard dates={date} setDates={setDate} />
               )}
             </div>
           </div>

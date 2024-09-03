@@ -13,13 +13,14 @@ import {
   getTotalUser,
 } from "../api/dashboard";
 import dayjs from "dayjs";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
 type Props = {
   dates: string[];
+  setDates: Dispatch<SetStateAction<string[]>>;
 };
 
-export default function Dashboard({ dates }: Props) {
+export default function Dashboard({ dates, setDates }: Props) {
   const queryTop5User = useQuery({
     queryKey: ["TOP_5_USER"],
     queryFn: async () => {
@@ -67,9 +68,12 @@ export default function Dashboard({ dates }: Props) {
   });
 
   useEffect(() => {
-    queryCountUserPerDay.refetch();
-    queryCountUserPerHour.refetch();
-    queryTop5User.refetch();
+    if (dates.length) {
+      queryCountUserPerDay.refetch();
+      queryCountUserPerHour.refetch();
+      queryTop5User.refetch();
+      setDates([]);
+    }
   }, [dates]);
 
   return (
