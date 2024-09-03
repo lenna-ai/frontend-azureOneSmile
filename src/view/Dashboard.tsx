@@ -5,28 +5,63 @@ import Chart from "../components/Chart";
 import Table from "../components/Table";
 import areaChartConfig from "../constants/area-chart-config";
 import barChartConfig from "../constants/bar-chart-config";
-import barChartSeries from "../constants/bar-chart-series";
 
-import { getCountUserPerDay, getTop5User } from "../api/dashboard";
+import {
+  getCountUserPerDay,
+  getTop5User,
+  getCountUserPerHour,
+  getTotalUser,
+} from "../api/dashboard";
 import dayjs from "dayjs";
+import { useEffect } from "react";
 
-export default function Dashboard() {
+type Props = {
+  dates: string[];
+};
+
+export default function Dashboard({ dates }: Props) {
   const queryTop5User = useQuery({
     queryKey: ["TOP_5_USER"],
     queryFn: getTop5User,
   });
-
+  console.log("DATES", dates);
   const queryCountUserPerDay = useQuery({
     queryKey: ["COUNT_USER_PER_DAY"],
     queryFn: async () => {
       const params = {
-        from_date: dayjs().subtract(90, "days").format("YYYY-MM-DD"),
-        to_date: dayjs().format("YYYY-MM-DD"),
+        from_date:
+          dates[0] || dayjs().subtract(90, "days").format("YYYY-MM-DD"),
+        to_date: dates[1] || dayjs().format("YYYY-MM-DD"),
       };
 
       return await getCountUserPerDay(params);
     },
   });
+
+  const queryCountUserPerHour = useQuery({
+    queryKey: ["COUNT_USER_PER_HOUR"],
+    queryFn: async () => {
+      const params = {
+        from_date:
+          dates[0] || dayjs().subtract(90, "days").format("YYYY-MM-DD"),
+        to_date: dates[1] || dayjs().format("YYYY-MM-DD"),
+      };
+
+      return await getCountUserPerHour(params);
+    },
+  });
+
+  const queryTotalUser = useQuery({
+    queryKey: ["TOTAL_USER"],
+    queryFn: async () => {
+      return await getTotalUser();
+    },
+  });
+
+  useEffect(() => {
+    queryCountUserPerDay.refetch();
+    queryCountUserPerHour.refetch();
+  }, [dates]);
 
   return (
     <div className="overflow-y-auto w-full gap-4 col-span-7 grid grid-cols-7 h-[calc(100vh-100px)]">
@@ -36,7 +71,7 @@ export default function Dashboard() {
             <Card className="col-span-2 flex justify-between items-center">
               <div>
                 <p className="text-gray-600">Total Users</p>
-                <b>230</b>
+                <b>{queryTotalUser.data?.TotalUser}</b>
               </div>
               <div className="size-[50px] bg-teal-400 fc rounded">
                 <i className="ri-group-fill text-xl text-white"></i>
@@ -45,7 +80,12 @@ export default function Dashboard() {
             <Card className="col-span-2 flex justify-between items-center">
               <div>
                 <p className="text-gray-600">Total Users Access</p>
-                <b>1810</b>
+                <b>
+                  {queryCountUserPerDay.data?.reduce(
+                    (acc, cur) => (acc += cur.TotalAccesses),
+                    0
+                  )}
+                </b>
               </div>
               <div className="size-[50px] bg-cyan-400 fc rounded">
                 <i className="ri-group-fill text-xl text-white"></i>
@@ -105,7 +145,17 @@ export default function Dashboard() {
         <h5>Peak Hours</h5>
         <div className="w-full">
           <Chart
-            data={{ series: barChartSeries }}
+            data={{
+              series: [
+                {
+                  name: "Access",
+                  data:
+                    queryCountUserPerHour.data?.map(
+                      (item) => item.ResultCountHour
+                    ) || [],
+                },
+              ],
+            }}
             type="bar"
             options={barChartConfig}
           />

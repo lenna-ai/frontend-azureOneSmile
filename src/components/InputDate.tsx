@@ -16,6 +16,7 @@ export default function InputDate({
           options={{
             mode: "range",
             dateFormat: "d M Y",
+            maxDate: "today",
           }}
           onChange={onChange}
         />

@@ -47,11 +47,16 @@ export async function getTotalUser() {
 }
 
 export async function getDataUser(params?: type.PageParams) {
-  const response = await API<type.PageParams, BaseAPI<type.RES_dataUser[]>>({
+  const response = await API<
+    type.PageParams,
+    BaseAPI<type.RES_dataUser[]> & {
+      total_pages: number;
+    }
+  >({
     method: "GET",
     path: "/dashboard",
     params,
   });
 
-  return response.data;
+  return response;
 }

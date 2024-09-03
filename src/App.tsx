@@ -31,6 +31,7 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+  const [date, setDate] = useState<string[]>([]);
   const [activeView, setActiveView] = useState<"DASHBOARD" | "DATA_TABLE">(
     "DASHBOARD"
   );
@@ -41,13 +42,17 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <main className="h-screen w-screen p-4 bg-gray-50">
+      <main className="h-screen w-screen p-4 bg-gray-50 overflow-hidden">
         <div className="grid grid-cols-6 gap-4 w-full h-full">
           <Sidebar activeView={activeView} onChangeView={onChangeView} />
           <div className="col-span-5 w-full">
             <div className="grid grid-col-7 w-full gap-4">
-              <Navbar activeView={activeView} />
-              {activeView === "DATA_TABLE" ? <DataTable /> : <Dashboard />}
+              <Navbar activeView={activeView} setDate={setDate} />
+              {activeView === "DATA_TABLE" ? (
+                <DataTable />
+              ) : (
+                <Dashboard dates={date} />
+              )}
             </div>
           </div>
         </div>

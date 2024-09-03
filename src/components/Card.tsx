@@ -8,7 +8,7 @@ type Props = {
 
 export default function Card({ className, children }: Props) {
   return (
-    <div className={clsx("shadow-md rounded-lg p-4 bg-white", className)}>
+    <div className={clsx("shadow-md rounded-lg p-4 bg-white t", className)}>
       {children}
     </div>
   );
