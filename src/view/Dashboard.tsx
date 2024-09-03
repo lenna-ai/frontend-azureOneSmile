@@ -69,6 +69,7 @@ export default function Dashboard({ dates }: Props) {
   useEffect(() => {
     queryCountUserPerDay.refetch();
     queryCountUserPerHour.refetch();
+    queryTop5User.refetch();
   }, [dates]);
 
   return (
